@@ -1,0 +1,662 @@
+/* ============================================================
+   DONIIXIFY THEMES — palettes ported from spicetify-themes repos
+   + per-theme full-screen animated backgrounds.
+
+   Layout has <div class="stars"><div class="stars-layer stars-1"></div>
+   <div class="stars-layer stars-2"></div><div class="stars-layer stars-3"></div></div>
+   — every theme reuses this skeleton with its own background-image and
+   keyframes so the canvas stays full-bleed like the original galaxy.
+   ============================================================ */
+
+/* Keep the stars container always visible — every theme paints into it */
+.stars { display: block; }
+
+/* Reset galaxy layers ONLY for non-default themes so each one starts clean.
+   :where() drops specificity to 0,0,0 so per-theme overrides win automatically.
+   Selector targets <html> because themes.js sets data-theme on documentElement. */
+:where(html:not([data-theme="default"])) .stars-layer {
+    background: none;
+    animation: none;
+    opacity: 1;
+}
+:where(html:not([data-theme="default"])) .nebula { display: none; }
+
+/* Let the animated background show through .main on every theme except default.
+   We don't touch .sidebar / .player-bar globally — each theme controls those
+   via either --sidebar-bg / --player-bg vars or an explicit per-theme rule. */
+:where(html:not([data-theme="default"])) .main { background: transparent; }
+
+/* Soft reusable animation keyframes (reused by many themes) */
+@keyframes drift-slow { from { transform: translate3d(0,0,0); } to { transform: translate3d(-280px, -180px, 0); } }
+@keyframes drift-mid  { from { transform: translate3d(0,0,0); } to { transform: translate3d(420px, -300px, 0); } }
+@keyframes drift-fast { from { transform: translate3d(0,0,0); } to { transform: translate3d(-540px, 380px, 0); } }
+@keyframes pulse-opacity { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+@keyframes float-up { from { transform: translateY(0); } to { transform: translateY(-1200px); } }
+@keyframes wave-slide { from { background-position: 0 0; } to { background-position: 1200px 0; } }
+@keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ============================================================
+   DEFAULT — original galaxy (stars + nebulae)
+   Galaxy CSS lives in app.css — leave it as-is when default.
+   ============================================================ */
+[data-theme="default"] {
+    --bg-base: #000; --bg-main: #000; --bg-elevated: #16181c;
+    --bg-card: #16181c; --bg-card-hover: #1d1f23; --bg-surface-2: #202327;
+    --bg-hover: rgba(231,233,234,0.10);
+    --border: #2f3336; --border-hover: #3e4144;
+    --text-primary: #e7e9ea; --text-secondary: #71767b; --text-muted: #565a5e;
+    --primary: #e7e9ea; --primary-hover: #fff;
+    --primary-soft: rgba(231,233,234,0.10); --primary-glow: rgba(231,233,234,0.28);
+    --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 18px;
+    --player-bg: transparent; --sidebar-bg: rgba(0,0,0,0.25); --main-bg: rgba(0,0,0,0.2);
+    background: #000;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+/* For default, restore stars-layer original styles by NOT overriding above. */
+
+/* ============================================================
+   VESPER — drifting amber dust on near-black
+   ============================================================ */
+[data-theme="vesper"] {
+    --bg-base: #101010; --bg-main: #101010; --bg-elevated: #161616;
+    --bg-card: #161616; --bg-card-hover: #1c1c1c; --bg-surface-2: #1a1a1a;
+    --bg-hover: rgba(255,255,255,0.04);
+    --border: #1f1f1f; --border-hover: #2a2a2a;
+    --text-primary: #ffffff; --text-secondary: #a0a0a0; --text-muted: #7e7e7e;
+    --primary: #ffc799; --primary-hover: #ffd9b3;
+    --primary-soft: rgba(255,199,153,0.08); --primary-glow: rgba(255,199,153,0.25);
+    --r-sm: 4px; --r-md: 6px; --r-lg: 8px; --r-xl: 12px;
+    --player-bg: #0a0a0a; --sidebar-bg: #0a0a0a; --main-bg: #101010;
+    background: #101010;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="vesper"] .stars { background: #0a0a0a; }
+[data-theme="vesper"] .stars-1 {
+    background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,199,153,0.7), transparent),
+        radial-gradient(1px 1px at 70% 70%, rgba(255,199,153,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 85% 20%, rgba(255,199,153,0.4), transparent);
+    background-size: 380px 380px;
+    animation: drift-slow 220s linear infinite, pulse-opacity 8s ease-in-out infinite;
+}
+[data-theme="vesper"] .stars-2 {
+    background-image: radial-gradient(1px 1px at 50% 50%, rgba(255,199,153,0.3), transparent);
+    background-size: 180px 180px;
+    animation: drift-fast 340s linear infinite;
+}
+[data-theme="vesper"] .nebula { display: none; }
+
+/* ============================================================
+   SPOTIFY CLASSIC — emerald vinyl waves + bottom green glow
+   ============================================================ */
+[data-theme="spotify-classic"] {
+    --bg-base: #121212; --bg-main: #121212; --bg-elevated: #181818;
+    --bg-card: #181818; --bg-card-hover: #282828; --bg-surface-2: #1f1f1f;
+    --bg-hover: rgba(255,255,255,0.07);
+    --border: #282828; --border-hover: #3e3e3e;
+    --text-primary: #ffffff; --text-secondary: #b3b3b3; --text-muted: #727272;
+    --primary: #1db954; --primary-hover: #1ed760;
+    --primary-soft: rgba(29,185,84,0.16); --primary-glow: rgba(29,185,84,0.45);
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --player-bg: #181818; --sidebar-bg: #000000; --main-bg: linear-gradient(180deg, #1f1f1f 0%, #121212 280px);
+    background: #121212;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="spotify-classic"] .stars { background: #121212; }
+[data-theme="spotify-classic"] .stars-1 {
+    background:
+        radial-gradient(circle at 50% 110%, rgba(29,185,84,0.35), transparent 50%),
+        radial-gradient(circle at 20% 100%, rgba(29,185,84,0.18), transparent 40%),
+        radial-gradient(circle at 80% 100%, rgba(29,185,84,0.18), transparent 40%);
+    animation: pulse-opacity 12s ease-in-out infinite;
+}
+[data-theme="spotify-classic"] .stars-2 {
+    background-image:
+        radial-gradient(1.5px 1.5px at 12% 25%, rgba(29,185,84,0.5), transparent),
+        radial-gradient(2px 2px at 78% 62%, rgba(30,215,96,0.4), transparent),
+        radial-gradient(1.5px 1.5px at 45% 88%, rgba(29,185,84,0.45), transparent);
+    background-size: 540px 540px;
+    animation: drift-mid 280s linear infinite;
+}
+[data-theme="spotify-classic"] .stars-3 { display: none; }
+[data-theme="spotify-classic"] .sidebar { background: #000; }
+[data-theme="spotify-classic"] .main { background: linear-gradient(180deg, #1f1f1f 0%, #121212 280px); }
+[data-theme="spotify-classic"] .player-bar { background: #181818; }
+[data-theme="spotify-classic"] .pb-btn-play { background: #fff; color: #000; border-radius: 999px; }
+[data-theme="spotify-classic"] .pb-btn-play:hover { background: var(--primary); transform: scale(1.06); }
+[data-theme="spotify-classic"] .btn { border-radius: 999px; font-weight: 700; }
+
+/* ============================================================
+   FLUENT DARK — animated Windows 11 mesh + cyan accent flare
+   ============================================================ */
+[data-theme="fluent-dark"] {
+    --bg-base: #272727; --bg-main: #272727; --bg-elevated: #202020;
+    --bg-card: #323232; --bg-card-hover: #3a3a3a; --bg-surface-2: #2a2a2a;
+    --bg-hover: rgba(255,255,255,0.06);
+    --border: #2d2d2d; --border-hover: #3f3f3f;
+    --text-primary: #ffffff; --text-secondary: #909090; --text-muted: #6a6a6a;
+    --primary: #00befd; --primary-hover: #44d3ff;
+    --primary-soft: rgba(0,190,253,0.16); --primary-glow: rgba(0,190,253,0.4);
+    --r-sm: 4px; --r-md: 8px; --r-lg: 10px; --r-xl: 14px;
+    --player-bg: #202020; --sidebar-bg: #202020; --main-bg: rgba(50,50,50,0.6);
+    background: #272727;
+    font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+}
+[data-theme="fluent-dark"] .stars { background: #272727; }
+[data-theme="fluent-dark"] .stars-1 {
+    background-image:
+        linear-gradient(rgba(0,190,253,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,190,253,0.05) 1px, transparent 1px);
+    background-size: 32px 32px, 32px 32px;
+}
+[data-theme="fluent-dark"] .stars-2 {
+    background:
+        radial-gradient(circle at 30% 30%, rgba(0,190,253,0.18), transparent 25%),
+        radial-gradient(circle at 75% 70%, rgba(0,190,253,0.12), transparent 25%);
+    animation: drift-mid 200s linear infinite alternate;
+}
+[data-theme="fluent-dark"] .stars-3 { display: none; }
+[data-theme="fluent-dark"] .sidebar,
+[data-theme="fluent-dark"] .main,
+[data-theme="fluent-dark"] .player-bar {
+    background: rgba(32,32,32,0.85);
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+}
+
+/* ============================================================
+   CATPPUCCIN MOCHA — animated pastel aurora + tiny stars
+   ============================================================ */
+[data-theme="catppuccin-mocha"] {
+    --bg-base: #1e1e2e; --bg-main: #1e1e2e; --bg-elevated: #181825;
+    --bg-card: #181825; --bg-card-hover: #313244; --bg-surface-2: #11111b;
+    --bg-hover: rgba(205,214,244,0.07);
+    --border: #313244; --border-hover: #45475a;
+    --text-primary: #cdd6f4; --text-secondary: #a6adc8; --text-muted: #6c7086;
+    --primary: #cba6f7; --primary-hover: #d8b9ff;
+    --primary-soft: rgba(203,166,247,0.16); --primary-glow: rgba(203,166,247,0.45);
+    --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-xl: 30px;
+    --player-bg: #11111b; --sidebar-bg: #181825; --main-bg: #1e1e2e;
+    background: #1e1e2e;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="catppuccin-mocha"] .stars { background: #1e1e2e; }
+[data-theme="catppuccin-mocha"] .stars-1 {
+    background:
+        radial-gradient(ellipse 50% 40% at 25% 25%, rgba(203,166,247,0.28), transparent 60%),
+        radial-gradient(ellipse 45% 35% at 75% 70%, rgba(245,194,231,0.18), transparent 60%),
+        radial-gradient(ellipse 40% 30% at 55% 95%, rgba(137,180,250,0.14), transparent 60%);
+    animation: drift-slow 280s linear infinite alternate;
+}
+[data-theme="catppuccin-mocha"] .stars-2 {
+    background-image:
+        radial-gradient(1.5px 1.5px at 18% 22%, rgba(203,166,247,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 88% 38%, rgba(245,194,231,0.5), transparent),
+        radial-gradient(2px 2px at 45% 75%, rgba(137,180,250,0.5), transparent),
+        radial-gradient(1px 1px at 60% 12%, rgba(166,227,161,0.4), transparent);
+    background-size: 480px 480px;
+    animation: drift-mid 320s linear infinite, pulse-opacity 6s ease-in-out infinite;
+}
+[data-theme="catppuccin-mocha"] .stars-3 { display: none; }
+[data-theme="catppuccin-mocha"] .player-bar { background: rgba(17,17,27,0.92); }
+[data-theme="catppuccin-mocha"] .sidebar { background: rgba(24,24,37,0.8); }
+[data-theme="catppuccin-mocha"] .album-card,
+[data-theme="catppuccin-mocha"] .settings-card,
+[data-theme="catppuccin-mocha"] .stat-tile {
+    background: rgba(24,24,37,0.6); border-color: #313244; border-radius: 16px;
+}
+[data-theme="catppuccin-mocha"] .pb-btn-play { background: #cba6f7; color: #1e1e2e; border-radius: 999px; }
+[data-theme="catppuccin-mocha"] .btn { border-radius: 999px; }
+
+/* ============================================================
+   BLOOM — animated emerald + sapphire blooming gradients
+   ============================================================ */
+[data-theme="bloom"] {
+    --bg-base: #14141a; --bg-main: #14141a; --bg-elevated: #121316;
+    --bg-card: #22222a; --bg-card-hover: #30303a; --bg-surface-2: #1a1a22;
+    --bg-hover: rgba(255,255,255,0.07);
+    --border: #34363d; --border-hover: #4a4d56;
+    --text-primary: #ffffff; --text-secondary: #b0b0b8; --text-muted: #707078;
+    --primary: #00ffa1; --primary-hover: #44ffb8;
+    --primary-soft: rgba(0,255,161,0.14); --primary-glow: rgba(0,255,161,0.4);
+    --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+    --player-bg: rgba(32,35,48,0.85); --sidebar-bg: rgba(18,19,22,0.7); --main-bg: rgba(20,20,26,0.5);
+    background: #14141a;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="bloom"] .stars { background: #14141a; }
+[data-theme="bloom"] .stars-1 {
+    background:
+        radial-gradient(circle at 15% 25%, rgba(0,255,161,0.35), transparent 35%),
+        radial-gradient(circle at 85% 75%, rgba(66,160,254,0.32), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04), transparent 30%);
+    animation: drift-slow 240s linear infinite alternate;
+    filter: blur(60px);
+}
+[data-theme="bloom"] .stars-2 {
+    background:
+        radial-gradient(circle at 70% 20%, rgba(255,99,255,0.18), transparent 35%),
+        radial-gradient(circle at 30% 80%, rgba(0,255,161,0.20), transparent 40%);
+    animation: drift-mid 320s linear infinite, pulse-opacity 14s ease-in-out infinite;
+    filter: blur(80px);
+}
+[data-theme="bloom"] .stars-3 {
+    background-image: radial-gradient(1.5px 1.5px at 50% 50%, rgba(255,255,255,0.4), transparent);
+    background-size: 220px 220px;
+    animation: drift-fast 380s linear infinite;
+}
+[data-theme="bloom"] .player-bar { background: rgba(32,35,48,0.85); backdrop-filter: blur(18px); }
+[data-theme="bloom"] .sidebar { background: rgba(18,19,22,0.7); backdrop-filter: blur(18px); }
+[data-theme="bloom"] .album-card { background: rgba(34,34,42,0.7); border-radius: 14px; backdrop-filter: blur(10px); }
+[data-theme="bloom"] .pb-btn-play { background: #00ffa1; color: #14141a; border-radius: 999px; box-shadow: 0 0 24px rgba(0,255,161,0.5); }
+
+/* ============================================================
+   BLOOM VIOLET
+   ============================================================ */
+[data-theme="bloom-violet"] {
+    --bg-base: #362c48; --bg-main: #362c48; --bg-elevated: #271f33;
+    --bg-card: #453a59; --bg-card-hover: #5f517c; --bg-surface-2: #2d2440;
+    --bg-hover: rgba(241,233,255,0.06);
+    --border: #594b73; --border-hover: #6f5e80;
+    --text-primary: #f1e9ff; --text-secondary: #cac3d9; --text-muted: #9a90b0;
+    --primary: #be98d9; --primary-hover: #d4b3ed;
+    --primary-soft: rgba(190,152,217,0.16); --primary-glow: rgba(190,152,217,0.4);
+    --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+    --player-bg: rgba(45,36,59,0.88); --sidebar-bg: rgba(39,31,51,0.85); --main-bg: rgba(54,44,72,0.5);
+    background: #271f33;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="bloom-violet"] .stars { background: #271f33; }
+[data-theme="bloom-violet"] .stars-1 {
+    background:
+        radial-gradient(circle at 20% 30%, rgba(190,152,217,0.4), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(140,98,170,0.35), transparent 45%);
+    animation: drift-slow 280s linear infinite alternate;
+    filter: blur(70px);
+}
+[data-theme="bloom-violet"] .stars-2 {
+    background-image:
+        radial-gradient(2px 2px at 30% 30%, rgba(241,233,255,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 75% 80%, rgba(190,152,217,0.7), transparent),
+        radial-gradient(1px 1px at 55% 15%, rgba(241,233,255,0.4), transparent);
+    background-size: 420px 420px;
+    animation: drift-mid 360s linear infinite;
+}
+[data-theme="bloom-violet"] .stars-3 { display: none; }
+[data-theme="bloom-violet"] .player-bar { background: rgba(45,36,59,0.88); backdrop-filter: blur(16px); }
+[data-theme="bloom-violet"] .sidebar { background: rgba(39,31,51,0.85); backdrop-filter: blur(16px); }
+[data-theme="bloom-violet"] .pb-btn-play { background: #be98d9; color: #13101a; border-radius: 999px; }
+
+/* ============================================================
+   BLOOM COFFEE — warm coffee glow + floating amber motes
+   ============================================================ */
+[data-theme="bloom-coffee"] {
+    --bg-base: #533a28; --bg-main: #533a28; --bg-elevated: #3a291d;
+    --bg-card: #6a5139; --bg-card-hover: #7c634b; --bg-surface-2: #45301f;
+    --bg-hover: rgba(255,247,229,0.06);
+    --border: #5c473d; --border-hover: #8a7566;
+    --text-primary: #fff7e5; --text-secondary: #e0d3b8; --text-muted: #b09a7a;
+    --primary: #f0ddc2; --primary-hover: #fff0d5;
+    --primary-soft: rgba(240,221,194,0.14); --primary-glow: rgba(240,221,194,0.35);
+    --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+    --player-bg: #33241a; --sidebar-bg: #3a291d; --main-bg: rgba(83,58,40,0.5);
+    background: #3a291d;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="bloom-coffee"] .stars { background: #3a291d; }
+[data-theme="bloom-coffee"] .stars-1 {
+    background:
+        radial-gradient(ellipse 60% 50% at 50% 100%, rgba(240,221,194,0.30), transparent 60%),
+        radial-gradient(circle at 20% 0%, rgba(240,221,194,0.14), transparent 50%);
+    animation: pulse-opacity 16s ease-in-out infinite;
+}
+[data-theme="bloom-coffee"] .stars-2 {
+    background-image:
+        radial-gradient(1.5px 1.5px at 25% 30%, rgba(240,221,194,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 70% 65%, rgba(240,221,194,0.6), transparent),
+        radial-gradient(1px 1px at 45% 85%, rgba(255,247,229,0.5), transparent);
+    background-size: 380px 380px;
+    animation: drift-mid 320s linear infinite;
+}
+[data-theme="bloom-coffee"] .stars-3 { display: none; }
+[data-theme="bloom-coffee"] .sidebar { background: #3a291d; }
+[data-theme="bloom-coffee"] .player-bar { background: #33241a; border-top-color: #5c473d; }
+[data-theme="bloom-coffee"] .album-card { background: #6a5139; border-radius: 14px; }
+[data-theme="bloom-coffee"] .pb-btn-play { background: #f0ddc2; color: #533a28; border-radius: 999px; }
+
+/* ============================================================
+   COMFY — Discord-like cobalt waves + blurry orbs
+   ============================================================ */
+[data-theme="comfy"] {
+    --bg-base: #23283d; --bg-main: #23283d; --bg-elevated: #1e2233;
+    --bg-card: #1e2233; --bg-card-hover: #2c3149; --bg-surface-2: #1a202e;
+    --bg-hover: rgba(255,255,255,0.05);
+    --border: #333b4d; --border-hover: #455370;
+    --text-primary: #ffffff; --text-secondary: #b9bbbe; --text-muted: #7e818a;
+    --primary: #7289da; --primary-hover: #869adf;
+    --primary-soft: rgba(114,137,218,0.16); --primary-glow: rgba(114,137,218,0.4);
+    --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 18px;
+    --player-bg: #101320; --sidebar-bg: #1a202e; --main-bg: #23283d;
+    background: #1a202e;
+    font-family: 'Whitney', 'Inter', system-ui, sans-serif;
+}
+[data-theme="comfy"] .stars { background: #1a202e; }
+[data-theme="comfy"] .stars-1 {
+    background:
+        radial-gradient(ellipse 80% 60% at 30% 30%, rgba(114,137,218,0.30), transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(35,184,243,0.20), transparent 60%);
+    animation: drift-slow 320s linear infinite alternate;
+    filter: blur(40px);
+}
+[data-theme="comfy"] .stars-2 {
+    background-image:
+        radial-gradient(1.5px 1.5px at 15% 20%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1.5px 1.5px at 75% 55%, rgba(114,137,218,0.6), transparent),
+        radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,0.3), transparent);
+    background-size: 460px 460px;
+    animation: drift-mid 360s linear infinite;
+}
+[data-theme="comfy"] .stars-3 { display: none; }
+[data-theme="comfy"] .sidebar { background: #1a202e; }
+[data-theme="comfy"] .player-bar { background: #101320; }
+[data-theme="comfy"] .album-card { background: #1e2233; border-radius: 10px; }
+[data-theme="comfy"] .pb-btn-play { background: #7289da; color: #fff; border-radius: 999px; }
+
+/* ============================================================
+   DRACULA — pink + violet ghosts + cyan stars
+   ============================================================ */
+[data-theme="dracula"] {
+    --bg-base: #282a36; --bg-main: #282a36; --bg-elevated: #21222c;
+    --bg-card: #21222c; --bg-card-hover: #44475a; --bg-surface-2: #191a21;
+    --bg-hover: rgba(248,248,242,0.06);
+    --border: #44475a; --border-hover: #6272a4;
+    --text-primary: #f8f8f2; --text-secondary: #bd93f9; --text-muted: #6272a4;
+    --primary: #ff79c6; --primary-hover: #ff92d0;
+    --primary-soft: rgba(255,121,198,0.16); --primary-glow: rgba(255,121,198,0.55);
+    --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+    --player-bg: rgba(24,25,32,0.92); --sidebar-bg: rgba(33,34,44,0.85); --main-bg: #282a36;
+    background: #282a36;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="dracula"] .stars { background: #282a36; }
+[data-theme="dracula"] .stars-1 {
+    background:
+        radial-gradient(circle at 18% 75%, rgba(255,121,198,0.35), transparent 35%),
+        radial-gradient(circle at 82% 22%, rgba(189,147,249,0.30), transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(139,233,253,0.15), transparent 45%);
+    animation: drift-slow 260s linear infinite alternate;
+    filter: blur(60px);
+}
+[data-theme="dracula"] .stars-2 {
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,121,198,0.7), transparent),
+        radial-gradient(1.5px 1.5px at 70% 60%, rgba(189,147,249,0.7), transparent),
+        radial-gradient(2px 2px at 45% 85%, rgba(139,233,253,0.6), transparent),
+        radial-gradient(1px 1px at 88% 18%, rgba(80,250,123,0.5), transparent);
+    background-size: 380px 380px;
+    animation: drift-mid 300s linear infinite, pulse-opacity 5s ease-in-out infinite;
+}
+[data-theme="dracula"] .stars-3 {
+    background-image: radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.4), transparent);
+    background-size: 180px 180px;
+    animation: drift-fast 420s linear infinite;
+}
+[data-theme="dracula"] .sidebar { background: rgba(33,34,44,0.85); backdrop-filter: blur(14px); }
+[data-theme="dracula"] .player-bar { background: rgba(24,25,32,0.92); backdrop-filter: blur(14px); }
+[data-theme="dracula"] .album-card { background: rgba(33,34,44,0.7); border-radius: 14px; backdrop-filter: blur(8px); }
+[data-theme="dracula"] .pb-btn-play { background: #ff79c6; color: #282a36; border-radius: 999px; box-shadow: 0 0 24px rgba(255,121,198,0.5); }
+[data-theme="dracula"] .page-title {
+    background: linear-gradient(120deg, #ff79c6, #bd93f9, #8be9fd);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+}
+
+/* ============================================================
+   GRUVBOX — terminal scanlines + sliding cursor band
+   ============================================================ */
+[data-theme="gruvbox"] {
+    --bg-base: #282828; --bg-main: #282828; --bg-elevated: #1d2021;
+    --bg-card: #32302f; --bg-card-hover: #3c3836; --bg-surface-2: #1d2021;
+    --bg-hover: rgba(235,219,178,0.06);
+    --border: #3c3836; --border-hover: #504945;
+    --text-primary: #ebdbb2; --text-secondary: #d5c4a1; --text-muted: #928374;
+    --primary: #fabd2f; --primary-hover: #ffd966;
+    --primary-soft: rgba(250,189,47,0.14); --primary-glow: rgba(250,189,47,0.45);
+    --r-sm: 2px; --r-md: 4px; --r-lg: 6px; --r-xl: 8px;
+    --player-bg: #1d2021; --sidebar-bg: #1d2021; --main-bg: #282828;
+    background: #282828;
+    font-family: 'JetBrains Mono', monospace;
+}
+[data-theme="gruvbox"] .stars { background: #282828; }
+[data-theme="gruvbox"] .stars-1 {
+    background-image: repeating-linear-gradient(180deg, transparent 0, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 3px);
+    mix-blend-mode: multiply;
+}
+[data-theme="gruvbox"] .stars-2 {
+    background:
+        linear-gradient(90deg, transparent 0%, rgba(250,189,47,0.06) 50%, transparent 100%);
+    background-size: 800px 100%;
+    animation: wave-slide 12s linear infinite;
+}
+[data-theme="gruvbox"] .stars-3 {
+    background:
+        radial-gradient(circle at 15% 90%, rgba(250,189,47,0.15), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(184,187,38,0.10), transparent 30%);
+    animation: pulse-opacity 7s ease-in-out infinite;
+}
+[data-theme="gruvbox"] .sidebar { background: #1d2021; }
+[data-theme="gruvbox"] .player-bar { background: #1d2021; }
+[data-theme="gruvbox"] .album-card { background: #32302f; border-radius: 4px; }
+[data-theme="gruvbox"] .pb-btn-play { background: #fabd2f; color: #282828; border-radius: 4px; }
+[data-theme="gruvbox"] .btn { border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ============================================================
+   TOKYO NIGHT — neon skyline + blinking windows
+   ============================================================ */
+[data-theme="tokyo-night"] {
+    --bg-base: #24283b; --bg-main: #24283b; --bg-elevated: #1f2335;
+    --bg-card: #1a1b26; --bg-card-hover: #414868; --bg-surface-2: #16161e;
+    --bg-hover: rgba(192,202,245,0.06);
+    --border: #292e42; --border-hover: #414868;
+    --text-primary: #c0caf5; --text-secondary: #9aa5ce; --text-muted: #565f89;
+    --primary: #9ece6a; --primary-hover: #b8e08a;
+    --primary-soft: rgba(158,206,106,0.14); --primary-glow: rgba(158,206,106,0.4);
+    --r-sm: 3px; --r-md: 5px; --r-lg: 8px; --r-xl: 10px;
+    --player-bg: #16161e; --sidebar-bg: #1f2335; --main-bg: #24283b;
+    background: #1a1b26;
+    font-family: 'JetBrains Mono', monospace;
+}
+[data-theme="tokyo-night"] .stars { background: #1a1b26; }
+[data-theme="tokyo-night"] .stars-1 {
+    background:
+        linear-gradient(180deg, transparent 60%, rgba(122,162,247,0.10) 85%, rgba(122,162,247,0.20) 100%),
+        radial-gradient(ellipse 70% 30% at 50% 100%, rgba(122,162,247,0.30), transparent 60%);
+}
+[data-theme="tokyo-night"] .stars-2 {
+    background-image:
+        radial-gradient(2px 2px at 12% 70%, rgba(247,118,142,0.7), transparent),
+        radial-gradient(2px 2px at 32% 80%, rgba(158,206,106,0.7), transparent),
+        radial-gradient(2px 2px at 55% 75%, rgba(122,162,247,0.7), transparent),
+        radial-gradient(2px 2px at 78% 82%, rgba(187,154,247,0.7), transparent),
+        radial-gradient(2px 2px at 90% 78%, rgba(255,158,100,0.7), transparent);
+    background-size: 320px 320px;
+    animation: pulse-opacity 3s ease-in-out infinite, drift-mid 400s linear infinite;
+}
+[data-theme="tokyo-night"] .stars-3 {
+    background-image: radial-gradient(1px 1px at 50% 50%, rgba(192,202,245,0.5), transparent);
+    background-size: 140px 140px;
+    animation: drift-fast 350s linear infinite;
+}
+[data-theme="tokyo-night"] .sidebar { background: #1f2335; }
+[data-theme="tokyo-night"] .player-bar { background: #16161e; }
+[data-theme="tokyo-night"] .album-card { background: #1a1b26; border-radius: 5px; }
+[data-theme="tokyo-night"] .pb-btn-play { background: #9ece6a; color: #1a1b26; border-radius: 5px; }
+
+/* ============================================================
+   NORD — falling snow + aurora ribbon
+   ============================================================ */
+[data-theme="nord"] {
+    --bg-base: #2e3440; --bg-main: #2e3440; --bg-elevated: #3b4252;
+    --bg-card: #3b4252; --bg-card-hover: #434c5e; --bg-surface-2: #4c566a;
+    --bg-hover: rgba(216,222,233,0.06);
+    --border: #434c5e; --border-hover: #4c566a;
+    --text-primary: #eceff4; --text-secondary: #d8dee9; --text-muted: #8a96a3;
+    --primary: #88c0d0; --primary-hover: #8fbcbb;
+    --primary-soft: rgba(136,192,208,0.16); --primary-glow: rgba(136,192,208,0.4);
+    --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 22px;
+    --player-bg: #3b4252; --sidebar-bg: #3b4252; --main-bg: #2e3440;
+    background: #2e3440;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="nord"] .stars { background: #2e3440; }
+[data-theme="nord"] .stars-1 {
+    background:
+        linear-gradient(115deg, rgba(136,192,208,0.18) 0%, transparent 35%),
+        linear-gradient(245deg, rgba(143,188,187,0.14) 0%, transparent 40%),
+        linear-gradient(180deg, rgba(94,129,172,0.18) 0%, transparent 30%);
+    animation: drift-slow 320s linear infinite alternate;
+    filter: blur(40px);
+}
+[data-theme="nord"] .stars-2 {
+    background-image:
+        radial-gradient(1.5px 1.5px at 20% 10%, rgba(236,239,244,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 60% 30%, rgba(236,239,244,0.5), transparent),
+        radial-gradient(2px 2px at 35% 55%, rgba(236,239,244,0.6), transparent),
+        radial-gradient(1.5px 1.5px at 80% 70%, rgba(236,239,244,0.5), transparent);
+    background-size: 320px 1200px;
+    animation: float-up 28s linear infinite;
+}
+[data-theme="nord"] .stars-3 { display: none; }
+[data-theme="nord"] .sidebar { background: #3b4252; }
+[data-theme="nord"] .player-bar { background: #3b4252; }
+[data-theme="nord"] .album-card { background: #3b4252; border-radius: 12px; }
+[data-theme="nord"] .pb-btn-play { background: #88c0d0; color: #2e3440; border-radius: 999px; }
+
+/* ============================================================
+   ROSÉ PINE — drifting rose petals
+   ============================================================ */
+[data-theme="rose-pine"] {
+    --bg-base: #191724; --bg-main: #191724; --bg-elevated: #1f1d2e;
+    --bg-card: #1f1d2e; --bg-card-hover: #26233a; --bg-surface-2: #1a1825;
+    --bg-hover: rgba(224,222,244,0.06);
+    --border: #26233a; --border-hover: #403d52;
+    --text-primary: #e0def4; --text-secondary: #908caa; --text-muted: #6e6a86;
+    --primary: #ebbcba; --primary-hover: #f2cfce;
+    --primary-soft: rgba(235,188,186,0.14); --primary-glow: rgba(235,188,186,0.35);
+    --r-sm: 10px; --r-md: 16px; --r-lg: 22px; --r-xl: 28px;
+    --player-bg: #1a1825; --sidebar-bg: #1f1d2e; --main-bg: #191724;
+    background: #191724;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="rose-pine"] .stars { background: #191724; }
+[data-theme="rose-pine"] .stars-1 {
+    background:
+        radial-gradient(ellipse 50% 40% at 30% 25%, rgba(235,188,186,0.25), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 75% 75%, rgba(196,167,231,0.20), transparent 60%);
+    animation: drift-slow 280s linear infinite alternate;
+    filter: blur(50px);
+}
+[data-theme="rose-pine"] .stars-2 {
+    background-image:
+        radial-gradient(2px 2px at 22% 18%, rgba(235,188,186,0.6), transparent),
+        radial-gradient(2px 2px at 70% 55%, rgba(196,167,231,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 45% 85%, rgba(235,111,146,0.5), transparent);
+    background-size: 320px 1200px;
+    animation: float-up 38s linear infinite, pulse-opacity 8s ease-in-out infinite;
+}
+[data-theme="rose-pine"] .stars-3 { display: none; }
+[data-theme="rose-pine"] .sidebar { background: #1f1d2e; }
+[data-theme="rose-pine"] .player-bar { background: #1a1825; }
+[data-theme="rose-pine"] .album-card { background: #1f1d2e; border-radius: 16px; }
+[data-theme="rose-pine"] .pb-btn-play { background: #ebbcba; color: #191724; border-radius: 999px; }
+
+/* ============================================================
+   SOLARIZED DARK — warm desert dust + amber sun
+   ============================================================ */
+[data-theme="solarized"] {
+    --bg-base: #002b36; --bg-main: #002b36; --bg-elevated: #073642;
+    --bg-card: #073642; --bg-card-hover: #0b4250; --bg-surface-2: #01313d;
+    --bg-hover: rgba(238,232,213,0.06);
+    --border: #0b4250; --border-hover: #586e75;
+    --text-primary: #839496; --text-secondary: #93a1a1; --text-muted: #657b83;
+    --primary: #859900; --primary-hover: #b4c200;
+    --primary-soft: rgba(133,153,0,0.14); --primary-glow: rgba(133,153,0,0.35);
+    --r-sm: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px;
+    --player-bg: #073642; --sidebar-bg: #073642; --main-bg: #002b36;
+    background: #002b36;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="solarized"] .stars { background: #002b36; }
+[data-theme="solarized"] .stars-1 {
+    background:
+        radial-gradient(circle at 50% 100%, rgba(181,137,0,0.30), transparent 45%),
+        radial-gradient(circle at 80% 0%, rgba(38,139,210,0.15), transparent 40%);
+    animation: pulse-opacity 12s ease-in-out infinite;
+}
+[data-theme="solarized"] .stars-2 {
+    background-image:
+        radial-gradient(1.5px 1.5px at 25% 35%, rgba(181,137,0,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 70% 60%, rgba(133,153,0,0.5), transparent),
+        radial-gradient(1px 1px at 45% 85%, rgba(238,232,213,0.4), transparent);
+    background-size: 380px 380px;
+    animation: drift-mid 320s linear infinite;
+}
+[data-theme="solarized"] .stars-3 { display: none; }
+[data-theme="solarized"] .sidebar { background: #073642; }
+[data-theme="solarized"] .player-bar { background: #073642; }
+[data-theme="solarized"] .album-card { background: #073642; border-radius: 8px; }
+[data-theme="solarized"] .pb-btn-play { background: #859900; color: #002b36; border-radius: 999px; }
+
+/* ============================================================
+   LUCID GLASS — animated glass orbs floating
+   ============================================================ */
+[data-theme="lucid"] {
+    --bg-base: #0c0c10; --bg-main: #0c0c10; --bg-elevated: rgba(20,20,28,0.6);
+    --bg-card: rgba(255,255,255,0.04); --bg-card-hover: rgba(255,255,255,0.08); --bg-surface-2: rgba(255,255,255,0.02);
+    --bg-hover: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.08); --border-hover: rgba(255,255,255,0.16);
+    --text-primary: #f0f0f5; --text-secondary: #a8a8b0; --text-muted: #6e6e78;
+    --primary: #a6c1ff; --primary-hover: #c0d4ff;
+    --primary-soft: rgba(166,193,255,0.12); --primary-glow: rgba(166,193,255,0.3);
+    --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px;
+    --player-bg: rgba(12,12,16,0.55); --sidebar-bg: rgba(255,255,255,0.03); --main-bg: rgba(255,255,255,0.025);
+    background: #0c0c10;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+[data-theme="lucid"] .stars { background: #0c0c10; }
+[data-theme="lucid"] .stars-1 {
+    background:
+        radial-gradient(circle at 25% 25%, rgba(166,193,255,0.32), transparent 35%),
+        radial-gradient(circle at 75% 75%, rgba(255,166,193,0.22), transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(166,255,193,0.16), transparent 40%);
+    animation: drift-slow 240s linear infinite alternate;
+    filter: blur(70px);
+}
+[data-theme="lucid"] .stars-2 {
+    background:
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.06), transparent 25%),
+        radial-gradient(circle at 20% 80%, rgba(166,193,255,0.18), transparent 30%);
+    animation: drift-mid 320s linear infinite, pulse-opacity 12s ease-in-out infinite;
+    filter: blur(50px);
+}
+[data-theme="lucid"] .stars-3 {
+    background-image: radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.5), transparent);
+    background-size: 240px 240px;
+    animation: drift-fast 380s linear infinite;
+}
+[data-theme="lucid"] .sidebar,
+[data-theme="lucid"] .main,
+[data-theme="lucid"] .player-bar {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(28px) saturate(140%);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+[data-theme="lucid"] .album-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    backdrop-filter: blur(14px) saturate(140%);
+}
+[data-theme="lucid"] .pb-btn-play { background: rgba(255,255,255,0.9); color: #0c0c10; border-radius: 999px; }

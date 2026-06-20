@@ -1,0 +1,44 @@
+﻿vendor/
+.env
+node_modules/
+
+# Storage â€” keep folder structure, ignore content
+storage/*
+!storage/music/
+!storage/covers/
+!storage/cache/
+!storage/icons/
+!storage/converter/
+!storage/tmp-dl/
+!storage/logs/
+!storage/locks/
+storage/music/*
+storage/covers/*
+storage/cache/*
+storage/icons/*
+storage/converter/*
+storage/tmp-dl/*
+storage/logs/*
+storage/locks/*
+storage/builds/
+storage/jobs/
+storage/queue/
+storage/autoscan.lock
+!storage/**/KEEP.md
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+
+# Android build artefacts
+app/android/app/build/
+app/android/.gradle/
+app/android/local.properties
+app/android/app/release/

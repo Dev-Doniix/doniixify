@@ -1,0 +1,57 @@
+CREATE TABLE IF NOT EXISTS active_devices (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    device_id VARCHAR(64) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    user_agent VARCHAR(500) DEFAULT NULL,
+    current_song_id INT UNSIGNED DEFAULT NULL,
+    is_playing TINYINT(1) NOT NULL DEFAULT 0,
+    last_seen DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_user_device (user_id, device_id),
+    INDEX idx_user (user_id),
+    INDEX idx_last_seen (last_seen),
+    CONSTRAINT fk_devices_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS jam_sessions (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(8) NOT NULL UNIQUE,
+    host_user_id INT UNSIGNED NOT NULL,
+    song_id INT UNSIGNED DEFAULT NULL,
+    position FLOAT NOT NULL DEFAULT 0,
+    paused TINYINT(1) NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_host (host_user_id),
+    INDEX idx_updated (updated_at),
+    CONSTRAINT fk_jam_host FOREIGN KEY (host_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS jam_participants (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    jam_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    joined_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_seen DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_jam_user (jam_id, user_id),
+    INDEX idx_jam (jam_id),
+    CONSTRAINT fk_jam_part_jam FOREIGN KEY (jam_id) REFERENCES jam_sessions(id) ON DELETE CASCADE,
+    CONSTRAINT fk_jam_part_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS lyrics_cache (
+    key_hash CHAR(32) NOT NULL PRIMARY KEY,
+    artist VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    plain_lyrics MEDIUMTEXT NULL,
+    synced_lyrics MEDIUMTEXT NULL,
+    not_found TINYINT(1) NOT NULL DEFAULT 0,
+    fetched_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS spotify_cover_cache (
+    spotify_id VARCHAR(64) NOT NULL PRIMARY KEY,
+    cover_url VARCHAR(500) NULL,
+    not_found TINYINT(1) NOT NULL DEFAULT 0,
+    fetched_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

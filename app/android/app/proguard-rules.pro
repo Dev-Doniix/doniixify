@@ -1,0 +1,2 @@
+-keepattributes JavascriptInterface
+-keep class android.webkit.** { *; }

@@ -1,0 +1,17 @@
+{
+    "id": "pl.leszczynowa5.doniixify",
+    "version": "1.0.4",
+    "vendor": "Doniixify",
+    "type": "web",
+    "main": "index.html",
+    "title": "Doniixify",
+    "icon": "icon.png",
+    "largeIcon": "largeIcon.png",
+    "bgColor": "#0a0a0d",
+    "iconColor": "#6366f1",
+    "appDescription": "Doniixify music streaming",
+    "resolution": "1920x1080",
+    "supportTouchMode": "full",
+    "handlesRelaunch": true,
+    "disableBackHistoryAPI": false
+}

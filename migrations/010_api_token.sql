@@ -1,0 +1,3 @@
+ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS api_token VARCHAR(64) DEFAULT NULL,
+  ADD UNIQUE INDEX IF NOT EXISTS idx_users_api_token (api_token);

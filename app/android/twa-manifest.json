@@ -1,0 +1,41 @@
+{
+  "packageId": "pl.music.music.twa",
+  "host": "music.leszczynowa5.pl",
+  "name": "Doniixify",
+  "launcherName": "Doniixify",
+  "display": "standalone",
+  "themeColor": "#0A0A0D",
+  "themeColorDark": "#0A0A0D",
+  "navigationColor": "#0A0A0D",
+  "navigationColorDark": "#0A0A0D",
+  "navigationDividerColor": "#0A0A0D",
+  "navigationDividerColorDark": "#0A0A0D",
+  "backgroundColor": "#0A0A0D",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://music.leszczynowa5.pl/app/icons/icon-512.png",
+  "maskableIconUrl": "https://music.leszczynowa5.pl/app/icons/icon-512-maskable.png",
+  "monochromeIconUrl": null,
+  "appVersionName": "0.1.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "signingKey": {
+    "path": "C:\\Users\\Admin\\Documents\\projekty\\doniixify-php\\app\\android\\android.keystore",
+    "alias": "android"
+  },
+  "splashScreenFadeOutDuration": 300,
+  "appVersion": "0.1.0",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "orientation": "any",
+  "fingerprints": [],
+  "generatorApp": "doniixify-builder",
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}

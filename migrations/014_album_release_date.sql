@@ -1,0 +1,1 @@
+ALTER TABLE albums ADD COLUMN release_date VARCHAR(10) NULL AFTER year;

@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "pl.music.music.twa",
+      "sha256_cert_fingerprints": [
+        "AC:B0:DC:37:AC:36:87:B1:6F:BF:0F:D7:16:82:8A:03:7D:0D:91:EB:1E:2F:2C:FA:5C:90:50:8E:E1:50:E2:13"
+      ]
+    }
+  }
+]
